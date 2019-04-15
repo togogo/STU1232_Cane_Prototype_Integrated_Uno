@@ -15,6 +15,10 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);//for BNO055
 SoftwareSerial Bluetooth(TxD, RxD);
 char c;
 
+int led = 9;//digital 9 for the white LED
+int brightness = 0;
+int fadeAmount = 5;
+
 void setup() {
 
   //start comm. for both serial and bluetooth
@@ -22,6 +26,7 @@ void setup() {
   Serial.begin(9600);
   
   pinMode(LED_PIN, OUTPUT);
+  pinMode(led, OUTPUT);//for led
 
 
   Serial.println("Orientation Sensor Test"); Serial.println("");
@@ -40,6 +45,13 @@ void setup() {
   }
 
 void loop() {
+
+  //for the white led...could be refined.
+  analogWrite(led, brightness);
+  brightness = brightness + fadeAmount;
+  if(brightness <= 0 || brightness >= 255){
+    fadeAmount = -fadeAmount;
+  }
 
   /*BNO055 code: Get a new sensor event */ 
   sensors_event_t event; 
